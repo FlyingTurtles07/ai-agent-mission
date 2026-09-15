@@ -1,0 +1,5 @@
+.env
+venv/
+__pycache__/
+*.pyc
+ai-agent-mission-firebase-adminsdk-fbsvc-6ddd31258f.json
