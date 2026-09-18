@@ -2,6 +2,5 @@ fastapi
 uvicorn
 firebase-admin
 python-dotenv
-google-generativeai
 openai
 pydantic
