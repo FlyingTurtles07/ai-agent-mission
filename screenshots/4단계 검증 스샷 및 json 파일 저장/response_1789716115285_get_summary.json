@@ -1,0 +1,12 @@
+{
+  "period": "2025-09-29 ~ 2026-09-08",
+  "count": 115,
+  "metrics": {
+    "average": 7.2,
+    "max": 18,
+    "min": 0,
+    "std_dev": 4.4
+  },
+  "trend": "하락 (직전 60일 평균 대비 -50.5%)",
+  "memo_day_count": 24
+}
