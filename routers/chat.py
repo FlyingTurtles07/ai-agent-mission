@@ -13,7 +13,7 @@ def chat(req: ChatRequest):
     동작 흐름:
     1. 데이터 요약 조회
     2. 요약을 시스템 프롬프트에 삽입
-    3. AI API 호출 (Gemini/OpenAI, AI_MODEL_PROVIDER로 분기)
+    3. AI API 호출 (코디세이 OpenAI 호환 API)
     4. 대화 내용을 conversations에 저장 (자동 저장)
     """
     rows = firestore_service.list_data()
