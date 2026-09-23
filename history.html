@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 비서 - 대화기록</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="topnav">
+  <div class="brand">📊 AI 비서</div>
+  <div class="nav-links">
+    <a href="index.html">챗봇</a>
+    <a href="data.html">데이터 관리</a>
+    <a href="history.html" class="active">대화기록</a>
+  </div>
+</nav>
+
+<main class="page-wrap">
+  <h1>대화기록</h1>
+  <div id="historyList" class="history-list"></div>
+
+  <div id="historyDetail" class="history-detail hidden">
+    <button id="closeDetailBtn" class="btn-ghost">← 목록으로</button>
+    <h2 id="detailTitle"></h2>
+    <div id="detailMessages"></div>
+  </div>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/history.js"></script>
+</body>
+</html>

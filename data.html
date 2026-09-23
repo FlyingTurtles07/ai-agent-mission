@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 비서 - 데이터 관리</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="topnav">
+  <div class="brand">📊 AI 비서</div>
+  <div class="nav-links">
+    <a href="index.html">챗봇</a>
+    <a href="data.html" class="active">데이터 관리</a>
+    <a href="history.html">대화기록</a>
+  </div>
+</nav>
+
+<main class="page-wrap">
+  <h1>계약서 발송·서명 현황 데이터</h1>
+
+  <form id="dataForm" class="data-form">
+    <input type="hidden" id="editId">
+    <input type="date" id="fDate" required>
+    <input type="number" id="fValue" placeholder="신규계약 건수" required>
+    <input type="text" id="fMemo" placeholder="메모">
+    <button type="submit" class="btn-primary" id="submitBtn">등록</button>
+    <button type="button" class="btn-ghost hidden" id="cancelEditBtn">취소</button>
+  </form>
+
+  <div id="dataTableWrap" class="table-wrap">
+    <table id="dataTable">
+      <thead>
+        <tr><th>날짜</th><th>건수</th><th>메모</th><th>액션</th></tr>
+      </thead>
+      <tbody id="dataTbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/data.js"></script>
+</body>
+</html>

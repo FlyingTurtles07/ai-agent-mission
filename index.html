@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 비서 - 챗봇</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="topnav">
+  <div class="brand">📊 AI 비서</div>
+  <div class="nav-links">
+    <a href="index.html" class="active">챗봇</a>
+    <a href="data.html">데이터 관리</a>
+    <a href="history.html">대화기록</a>
+  </div>
+</nav>
+
+<main class="chat-wrap">
+  <div class="chat-toolbar">
+    <select id="convSelect">
+      <option value="">+ 새 대화</option>
+    </select>
+    <button id="newChatBtn" class="btn-ghost">＋ 새 대화</button>
+  </div>
+
+  <div id="chatMessages" class="chat-messages"></div>
+
+  <div id="typingIndicator" class="typing hidden">
+    <span></span><span></span><span></span>
+  </div>
+
+  <form id="chatForm" class="chat-input-row">
+    <input id="chatInput" type="text" placeholder="계약서 발송·서명 현황에 대해 물어보세요" autocomplete="off" required>
+    <button type="submit" class="btn-primary">전송</button>
+  </form>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/chat.js"></script>
+</body>
+</html>
