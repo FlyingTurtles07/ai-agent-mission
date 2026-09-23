@@ -34,11 +34,10 @@ def build_system_prompt(summary: dict) -> str:
     )
 
 
-def ask_ai(system_prompt: str, user_message: str) -> str:
+def ask_ai(system_prompt: str, user_message: str, history: list[dict] | None = None) -> str:
     """코디세이(OpenAI 호환 엔드포인트)로 채팅 요청을 보내고 답변 텍스트를 반환한다."""
     from openai import OpenAI, OpenAIError
 
-    # 값이 비어 있거나 앞뒤 공백이 섞여도 안전하게 처리한다 (.env 오타 방지)
     api_key = (os.getenv("CODYSSEY_API_KEY") or "").strip()
     if not api_key:
         raise RuntimeError("CODYSSEY_API_KEY 환경변수가 설정되어 있지 않습니다.")
@@ -48,15 +47,14 @@ def ask_ai(system_prompt: str, user_message: str) -> str:
 
     client = OpenAI(api_key=api_key, base_url=base_url)
 
-    # 참고: 기존의 max_tokens=1000 은 제거했다. gpt-5 계열은 max_tokens 를 지원하지 않아
-    # 400 에러가 날 수 있고, 추론(reasoning) 토큰이 한도를 먼저 소진해 답변이 빌 수도 있다.
+    messages = [{"role": "system", "content": system_prompt}]
+    messages.extend({"role": h["role"], "content": h["content"]} for h in (history or []))
+    messages.append({"role": "user", "content": user_message})
+
     try:
         response = client.chat.completions.create(
             model=model,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message},
-            ],
+            messages=messages,
         )
     except OpenAIError as e:
         raise RuntimeError(f"코디세이 API 호출 실패 (model={model}): {e}") from e
