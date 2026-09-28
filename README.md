@@ -120,10 +120,8 @@ AI_MODEL=gpt-5-mini
 - **백엔드**: Render — `https://ai-agent-mission.onrender.com`
 - **프론트엔드**: Vercel — `ai-agent-mission.vercel.app` <br/> 저장소 루트가 아닌 `frontend` 폴더를 Root Directory로 지정해 정적 배포
 - Vercel 배포 시 Framework Preset은 **Other**로 설정 (Python 백엔드 코드 자동 감지 방지)
-```
-<<<<<<< HEAD
 
----
+===
 
 ## 🧰 보너스: AI 도구 호출 (Function Calling) + GPT Actions
 
@@ -179,4 +177,3 @@ sequenceDiagram
 - 데이터 관리 화면: 요약 카드, 추이 그래프(Chart.js), JSON 다운로드
 - 전체 화면 다크/라이트 모드 토글
 =======
->>>>>>> f86c4832ddcd7f4dd7dc3a4e80f98edd71343e47
