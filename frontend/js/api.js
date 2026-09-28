@@ -18,6 +18,10 @@ const api = {
   updateData: (id, payload) => apiRequest(`/api/data/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
   deleteData: (id) => apiRequest(`/api/data/${id}`, { method: "DELETE" }),
 
+  // 요약 / 통계
+  getSummary: () => apiRequest("/api/data/summary"),
+  getStatistics: () => apiRequest("/api/data/statistics"),
+
   // 대화 기록
   getConversations: () => apiRequest("/api/conversations"),
   getConversation: (id) => apiRequest(`/api/conversations/${id}`),

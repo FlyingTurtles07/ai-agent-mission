@@ -124,14 +124,56 @@ AI_MODEL=gpt-5-mini
 
 ---
 
-## 테스트표 (10단계)
+## 🧰 보너스: AI 도구 호출 (Function Calling) + GPT Actions
 
-| # | 항목 | 확인 방법 | 기대 결과 |
-|---|---|---|---|
-| 1 | 뱃지 렌더링 | GitHub 저장소에서 README.md 미리보기 | 6개 뱃지 정상 표시 |
-| 2 | 코드블록/표 렌더링 | 마크다운 미리보기 | 설치 명령어, API 표 깨짐 없이 표시 |
-| 3 | 폴더 구조 일치 | 실제 저장소 구조와 비교 | README와 실제 구조 동일 |
-| 4 | 설치 가이드 재현 | 새 환경에서 README만 보고 따라해보기 | venv 생성부터 서버 실행까지 문제없이 진행 |
-| 5 | API 명세 정확성 | 실제 Swagger UI(/docs)와 대조 | 경로/메서드 일치 |
+### 도구 목록과 호출 근거
 
-저장소에 `README.md`로 저장하시고, 1~5번 확인해서 알려주시면 최종 검증표까지 정리하고 미션 마무리할게요.
+GPT가 질문을 보고 필요한 도구를 스스로 고릅니다. 서버는 `tools`에 정의된 설명(description)을 근거로 GPT가 선택한 도구를 실행하고, 그 결과를 다시 GPT에 전달합니다. 사용한 도구는 응답의 `tools_used`와 채팅 화면의 🔧 배지로 확인할 수 있습니다.
+
+| 도구 | 언제 호출되나 (근거) | 내부 기능 |
+|---|---|---|
+| `get_data_summary` | 기간·평균·최대/최소·추세를 물을 때 | `/api/data/summary` |
+| `get_data_statistics` | 최근 흐름, 이동평균을 물을 때 | `/api/data/statistics` |
+| `list_conversations` | 이전 대화 목록을 물을 때 | `/api/conversations` |
+| `get_conversation` | 특정 이전 대화 내용을 물을 때 | `/api/conversations/{id}` |
+
+### 호출 흐름
+
+```mermaid
+sequenceDiagram
+    participant U as 사용자
+    participant S as FastAPI (/api/chat)
+    participant G as GPT
+    participant D as Firestore
+    U->>S: 질문
+    S->>G: 질문 + 데이터 요약 프롬프트 + tools 스키마
+    G-->>S: 도구 호출 요청 (예: get_data_statistics)
+    S->>D: 내부 기능 실행
+    D-->>S: 결과
+    S->>G: 도구 결과 전달
+    G-->>S: 최종 답변
+    S-->>U: 답변 + 사용한 도구 목록
+```
+
+1. 서버가 GPT에 질문과 도구 스키마를 함께 보냅니다.
+2. GPT가 도구가 필요하다고 판단하면 도구 이름과 인자를 반환합니다.
+3. 서버가 해당 내부 기능을 실행해 결과를 GPT에 돌려줍니다. (최대 3회 반복)
+4. GPT가 결과를 바탕으로 최종 답변을 만들고, 대화가 저장됩니다.
+
+### GPT Actions 연동 (외부 채널)
+
+동일한 조회 기능을 ChatGPT의 Custom GPT에서 호출할 수 있습니다.
+
+1. ChatGPT에서 GPT 만들기 → Configure → Actions → Create new action
+2. `actions_openapi.yaml` 내용을 붙여넣기 (서버 주소는 Render 배포 URL)
+3. Authentication은 None (읽기 전용 공개 API)
+4. Test로 `getDataSummary`, `getDataStatistics` 호출 확인
+5. 대화창에서 "최근 7일 이동평균이 어때?" 질문 → GPT가 `getDataStatistics`를 호출하는지 확인
+
+> Render 무료 티어는 첫 요청이 느릴 수 있어 Actions 첫 호출이 지연될 수 있습니다.
+
+### 인사이트·UX
+
+- `GET /api/data/statistics`: 일별 값과 최근 7일 이동평균(최근 7개 데이터 포인트 기준) 제공
+- 데이터 관리 화면: 요약 카드, 추이 그래프(Chart.js), JSON 다운로드
+- 전체 화면 다크/라이트 모드 토글

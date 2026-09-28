@@ -15,6 +15,16 @@ function addMessage(role, text) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+function addToolBadge(tools) {
+  if (!tools || !tools.length) return;
+  const names = [...new Set(tools.map((t) => t.name))].join(", ");
+  const div = document.createElement("div");
+  div.className = "tool-badge";
+  div.textContent = "🔧 사용한 도구: " + names;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
 async function loadConversationList() {
   try {
     const list = await api.getConversations();
@@ -66,6 +76,7 @@ chatForm.addEventListener("submit", async (e) => {
     const res = await api.sendChat(text, currentConversationId);
     typingIndicator.classList.add("hidden");
     addMessage("ai", res.reply);
+    addToolBadge(res.tools_used);
 
     if (!currentConversationId && res.conversation_id) {
       currentConversationId = res.conversation_id;
